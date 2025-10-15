@@ -22,8 +22,8 @@ router.post("/signin", async (req, res) => {
         }
 
         console.log("Looking for user with email:", email);
-        const user = await User.matchPassword(email, password);
-        console.log("User authenticated successfully:", user);
+        const token = await User.matchPasswordAndGenerateToken(email, password);
+    return res.cookie('token' , token).redirect("/");
         
         return res.redirect("/");
     } catch (error) {
@@ -33,6 +33,11 @@ router.post("/signin", async (req, res) => {
         return res.render("signin", { error: error.message });
     }
 });
+
+ router.get("/logout", (req, res) => {
+    res.clearCookie("token").redirect("/");
+
+ })
 
 router.post("/signup", async (req, res) => {
     const { fullName, email, password } = req.body;

@@ -8,24 +8,40 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Add Blog</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li>
-       
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" 
-             data-bs-toggle="dropdown" aria-expanded="false">
-            Om Singh
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Log-Out</a></li>
-            
-          </ul>
-        </li>
+        <% if (typeof user !== 'undefined') { %>  <!-- ✅ SAFE CHECK -->
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/blog/add-new">Add Blog</a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" 
+               data-bs-toggle="dropdown" aria-expanded="false">
+              <%= user.fullName || user.email %>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/user/logout">Log-Out</a></li>
+            </ul>
+          </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/user/signin">Signin</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/user/signup">Create account</a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="#">Features</a>
+          </li>
+        <% } %>
       </ul>
     </div>
   </div>
 </nav>
+
+<% if (locals.error) { %>
+  <div class="alert alert-danger" role="alert">
+    <%= locals.error %>
+  </div>
+<% } %>

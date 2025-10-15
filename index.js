@@ -3,7 +3,10 @@ const path = require("path");
 const fs = require("fs"); // Add this line
 const userRoute = require('./routes/user');
 const mongoose = require("mongoose");
+ const blogRoute = require('./routes/blog');
 
+ const  cookieParser = require("cookie-parser");
+const { checkForAuthenticationCookie } = require("./middlewares/authentication");
 const app = express();
 const PORT = 3000;
 
@@ -30,10 +33,20 @@ try {
 
 app.use(express.urlencoded({ extended: false }));
 
+app.use(cookieParser());
+app.use (checkForAuthenticationCookie("token"));
+
 app.get("/", (req, res) => {
-    res.render("home");
+    res.render("home"
+        ,
+    {user: req.user}
+    );
 });
 
 app.use("/user", userRoute);
+
+ app.use("/user", userRoute);
+    app.use("/blog", blogRoute);
+
 
 app.listen(PORT, () => console.log(`Server started at PORT:${PORT}`));
